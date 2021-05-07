@@ -15,6 +15,7 @@ import {isOpenCoWebsite, OpenCoWebSiteEvent} from "./Events/OpenCoWebSiteEvent";
 import {isPlaySoundEvent, PlaySoundEvent} from "./Events/PlaySoundEvent";
 import {isStopSoundEvent, StopSoundEvent} from "./Events/StopSoundEvent";
 import {isLoadSoundEvent, LoadSoundEvent} from "./Events/LoadSoundEvent";
+import {isOpenIframeEvent, OpenIframeEvent} from "./Events/OpenIframeEvent";
 
 
 /**
@@ -57,6 +58,9 @@ class IframeListener {
 
     private readonly _playSoundStream: Subject<PlaySoundEvent> = new Subject();
     public readonly playSoundStream = this._playSoundStream.asObservable();
+
+    private readonly _openIframeStream: Subject<OpenIframeEvent> = new Subject();
+    public readonly openIframeStream = this._openIframeStream.asObservable();
 
     private readonly _stopSoundStream: Subject<StopSoundEvent> = new Subject();
     public readonly stopSoundStream = this._stopSoundStream.asObservable();
@@ -109,6 +113,9 @@ class IframeListener {
                 }
                 else if(payload.type === 'loadSound' && isLoadSoundEvent(payload.data)) {
                     this._loadSoundStream.next(payload.data);
+                }
+                else if(payload.type === 'openIframe' && isOpenIframeEvent(payload.data)) {
+                    this._openIframeStream.next(payload.data);
                 }
                 else if(payload.type === 'closeCoWebSite') {
                     scriptUtils.closeCoWebSite();

@@ -12,6 +12,7 @@ import {OpenCoWebSiteEvent} from "./Api/Events/OpenCoWebSiteEvent";
 import {PlaySoundEvent} from "./Api/Events/PlaySoundEvent";
 import {StopSoundEvent} from "./Api/Events/StopSoundEvent";
 import {LoadSoundEvent} from "./Api/Events/LoadSoundEvent";
+import {OpenIframeEvent} from "./Api/Events/OpenIframeEvent";
 import SoundConfig = Phaser.Types.Sound.SoundConfig;
 
 interface WorkAdventureApi {
@@ -29,6 +30,7 @@ interface WorkAdventureApi {
     displayBubble() : void;
     removeBubble() : void;
     loadSound(url : string): Sound;
+    openIframe(html : string, targetObject : string) : void;
 }
 
 declare global {
@@ -154,18 +156,6 @@ window.WA = {
             },'*');
     },
 
-    /*playSound(url: string, config : SoundConfig) : string{
-        window.parent.postMessage({
-            "type" : 'playSound',
-            "data": {
-                url,
-                config
-            } as PlaySoundEvent
-
-        },'*');
-        return url;
-    },*/
-
     loadSound(url: string) : Sound {
         return new Sound(url);
     },
@@ -228,6 +218,16 @@ window.WA = {
 
         popups.set(popupId, popup)
         return popup;
+    },
+
+    openIframe(html : string,targetObject : string) : void{
+        window.parent.postMessage({
+            "type" : 'openIframe',
+            "data" : {
+                html,
+                targetObject,
+            } as OpenIframeEvent
+        },'*');
     },
     /**
      * Listen to messages sent by the local user, in the chat.
